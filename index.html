@@ -35,7 +35,7 @@
   @keyframes blip{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.5); opacity:.5; } }
 
   /* type */
-  .kicker{ font-size:13px; font-weight:800; letter-spacing:.14em; color:var(--amber); text-transform:uppercase; }
+  .wordmark{ font-size:14px; font-weight:800; letter-spacing:.06em; color:var(--amber); }
   h1.hero{ font-size:40px; font-weight:900; letter-spacing:-.03em; line-height:1.05; margin-top:12px; font-stretch:115%; }
   .lede{ font-size:16px; color:var(--muted); line-height:1.6; margin-top:14px; max-width:34ch; }
   .btn-p{ display:block; width:100%; background:var(--amber); color:#0a0e1a; border:none; font-family:inherit;
@@ -44,7 +44,7 @@
   .btn-p:active{ transform:scale(.97); }
   .btn-s{ display:block; width:100%; background:rgba(255,255,255,.06); color:#fff; border:1px solid rgba(255,255,255,.14);
     font-family:inherit; font-weight:700; font-size:15px; padding:14px; border-radius:14px; cursor:pointer; margin-top:12px; }
-  .langrow{ display:flex; justify-content:flex-end; padding:16px 24px 0; }
+  .langrow{ display:flex; justify-content:space-between; align-items:center; padding:16px 24px 0; }
   .langrow button{ background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); color:#fff;
     font-family:inherit; font-size:13px; font-weight:700; padding:8px 14px; border-radius:99px; cursor:pointer; }
   .trust{ display:flex; gap:8px; margin-top:22px; flex-wrap:wrap; }
@@ -138,10 +138,9 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="langrow"><button id="lang-btn">हिन्दी</button></div>
+  <div class="langrow"><span class="wordmark" data-i18n="kicker">SarkariRadar</span><button id="lang-btn">हिन्दी</button></div>
 
   <div class="view on" id="v-home">
-    <div class="kicker rise" data-i18n="kicker">SarkariRadar</div>
     <h1 class="hero rise" style="animation-delay:.08s" data-i18n="hero">Every government scheme you're eligible for. Found in 60 seconds.</h1>
     <p class="lede rise" style="animation-delay:.14s" data-i18n="lede">Answer 8 quick questions. Our radar scans 30 central government schemes and pings the ones with your name on them — with what you get and how to apply.</p>
     <div class="radar rise" style="animation-delay:.2s" aria-hidden="true">
@@ -201,7 +200,6 @@
   </div>
 
   <div class="view" id="v-browse">
-    <div class="kicker" data-i18n="kicker">SarkariRadar</div>
     <h1 class="hero" style="font-size:30px" data-i18n="all">All 30 schemes</h1>
     <div id="browse-list"></div>
     <button class="btn-s" id="back-res">← <span data-i18n="backres">Back to results</span></button>
