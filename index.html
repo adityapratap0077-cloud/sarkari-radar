@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<title>SarkariRadar — every government scheme you're eligible for</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root{ --ink:#0a0e1a; --ink2:#101623; --paper:#f2f4f7; --muted:#8b94a7; --amber:#f0b429; --amber-deep:#b97f0a; --green:#22c55e; }
+  html,body{ height:100%; }
+  body{ background:var(--ink); color:var(--paper); font-family:'Archivo',system-ui,sans-serif; overflow-x:hidden; }
+  .grain{ position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
+  .wrap{ max-width:480px; margin:0 auto; min-height:100dvh; position:relative; display:flex; flex-direction:column; }
+  .view{ display:none; padding:28px 24px 40px; animation:vin .35s cubic-bezier(.2,.7,.2,1); flex:1; }
+  .view.on{ display:block; }
+  @keyframes vin{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
+  .rise{ opacity:0; transform:translateY(14px); animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes rise{ to{ opacity:1; transform:none; } }
+
+  /* radar */
+  .radar{ position:relative; width:220px; height:220px; margin:26px auto; }
+  .radar svg{ position:absolute; inset:0; }
+  .sweep{ position:absolute; inset:0; border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(240,180,41,.5), transparent 22%);
+    animation:spin 3.2s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .blip{ position:absolute; border-radius:50%; background:var(--amber);
+    box-shadow:0 0 12px 3px rgba(240,180,41,.7); animation:blip 2s ease-in-out infinite; }
+  @keyframes blip{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.5); opacity:.5; } }
+
+  /* type */
+  .kicker{ font-size:13px; font-weight:800; letter-spacing:.14em; color:var(--amber); text-transform:uppercase; }
+  h1.hero{ font-size:40px; font-weight:900; letter-spacing:-.03em; line-height:1.05; margin-top:12px; font-stretch:115%; }
+  .lede{ font-size:16px; color:var(--muted); line-height:1.6; margin-top:14px; max-width:34ch; }
+  .btn-p{ display:block; width:100%; background:var(--amber); color:#0a0e1a; border:none; font-family:inherit;
+    font-weight:800; font-size:17px; padding:17px; border-radius:16px; cursor:pointer; margin-top:26px;
+    transition:transform .15s ease; }
+  .btn-p:active{ transform:scale(.97); }
+  .btn-s{ display:block; width:100%; background:rgba(255,255,255,.06); color:#fff; border:1px solid rgba(255,255,255,.14);
+    font-family:inherit; font-weight:700; font-size:15px; padding:14px; border-radius:14px; cursor:pointer; margin-top:12px; }
+  .langrow{ display:flex; justify-content:flex-end; padding:16px 24px 0; }
+  .langrow button{ background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); color:#fff;
+    font-family:inherit; font-size:13px; font-weight:700; padding:8px 14px; border-radius:99px; cursor:pointer; }
+  .trust{ display:flex; gap:8px; margin-top:22px; flex-wrap:wrap; }
+  .trust span{ font-size:12px; font-weight:600; color:var(--muted); background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08); padding:7px 12px; border-radius:99px; }
+
+  /* quiz */
+  .qbar{ height:6px; border-radius:99px; background:rgba(255,255,255,.1); overflow:hidden; margin-bottom:26px; }
+  .qbar i{ display:block; height:100%; background:var(--amber); border-radius:99px; transition:width .4s ease; }
+  .q-q{ font-size:26px; font-weight:800; letter-spacing:-.02em; line-height:1.25; }
+  .q-sub{ font-size:14px; color:var(--muted); margin-top:8px; }
+  .opts{ display:flex; flex-direction:column; gap:10px; margin-top:22px; }
+  .opt{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:#fff; font-family:inherit;
+    font-size:16px; font-weight:600; padding:16px 18px; border-radius:14px; cursor:pointer; text-align:left;
+    transition:all .15s ease; display:flex; justify-content:space-between; align-items:center; }
+  .opt:active{ transform:scale(.98); }
+  .opt.sel{ background:rgba(240,180,41,.14); border-color:var(--amber); }
+  .opt .tick{ color:var(--amber); font-weight:800; }
+  .qnav{ display:flex; gap:10px; margin-top:22px; }
+  .qnav .btn-p{ margin-top:0; flex:1; }
+  .qback{ background:none; border:1px solid rgba(255,255,255,.14); color:var(--muted); font-family:inherit;
+    font-weight:700; font-size:15px; padding:0 22px; border-radius:16px; cursor:pointer; }
+  .numin{ width:100%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:#fff;
+    font-family:inherit; font-size:34px; font-weight:800; padding:18px; border-radius:16px; margin-top:22px;
+    text-align:center; outline:none; font-variant-numeric:tabular-nums; }
+  .numin:focus{ border-color:var(--amber); }
+  select.state{ width:100%; background:#141b2e; border:1px solid rgba(255,255,255,.14); color:#fff;
+    font-family:inherit; font-size:16px; font-weight:600; padding:16px; border-radius:14px; margin-top:22px; outline:none; }
+
+  /* scanning */
+  .scan-wrap{ text-align:center; padding-top:40px; }
+  .scan-t{ font-size:20px; font-weight:800; margin-top:8px; }
+  .scan-s{ font-size:14px; color:var(--muted); margin-top:8px; font-variant-numeric:tabular-nums; }
+
+  /* results */
+  .res-head{ text-align:center; padding:10px 0 6px; }
+  .res-n{ font-size:74px; font-weight:900; letter-spacing:-.04em; color:var(--amber); font-variant-numeric:tabular-nums; font-stretch:125%; }
+  .res-l{ font-size:18px; font-weight:700; margin-top:2px; }
+  .res-s{ font-size:14px; color:var(--muted); margin-top:6px; }
+  .sec-t{ font-size:13px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--amber); margin:28px 0 4px; }
+  .card{ background:var(--ink2); border:1px solid rgba(255,255,255,.09); border-radius:18px; padding:18px; margin-top:12px;
+    position:relative; overflow:hidden; }
+  .card::before{ content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--amber), transparent); }
+  .card h3{ font-size:17px; font-weight:800; line-height:1.35; }
+  .card .hi{ font-size:13px; color:var(--muted); margin-top:2px; }
+  .benefit{ display:inline-block; margin-top:10px; font-size:15px; font-weight:800; color:var(--amber);
+    background:rgba(240,180,41,.12); border:1px solid rgba(240,180,41,.3); padding:7px 13px; border-radius:99px; }
+  .why{ display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  .why span{ font-size:12px; font-weight:600; color:#b9f5cd; background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.25); padding:5px 10px; border-radius:99px; }
+  .apply{ display:flex; gap:10px; margin-top:12px; }
+  .apply a{ flex:1; text-align:center; background:var(--amber); color:#0a0e1a; font-weight:800; font-size:14px;
+    padding:12px; border-radius:12px; text-decoration:none; }
+  .apply button{ flex:1; background:rgba(255,255,255,.06); color:#fff; border:1px solid rgba(255,255,255,.14);
+    font-family:inherit; font-weight:700; font-size:14px; padding:12px; border-radius:12px; cursor:pointer; }
+  .notes{ font-size:12.5px; color:var(--muted); line-height:1.55; margin-top:10px; display:none; }
+  .notes.on{ display:block; }
+  .almost{ opacity:.92; border-style:dashed; }
+  .almost::before{ background:linear-gradient(90deg, var(--muted), transparent); }
+  .miss{ font-size:13px; font-weight:700; color:var(--amber); margin-top:10px; }
+  .detail{ position:fixed; inset:0; z-index:70; display:none; align-items:flex-end; justify-content:center;
+    background:rgba(4,6,12,.7); backdrop-filter:blur(6px); }
+  .detail.on{ display:flex; }
+  .dsheet{ width:100%; max-width:480px; max-height:86dvh; overflow-y:auto; background:var(--ink2);
+    border:1px solid rgba(255,255,255,.12); border-radius:24px 24px 0 0; padding:24px; animation:vin .3s ease; }
+  .dsheet h2{ font-size:22px; font-weight:800; line-height:1.3; }
+  .kv{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid rgba(255,255,255,.08); font-size:14px; }
+  .kv b{ color:var(--muted); font-weight:600; flex:none; }
+  .kv span{ text-align:right; }
+  .src{ text-align:center; font-size:10px; color:rgba(255,255,255,.3); margin:26px 0 10px; }
+
+  /* share modal */
+  .modal{ position:fixed; inset:0; z-index:80; display:none; align-items:center; justify-content:center; padding:24px;
+    background:rgba(4,6,12,.8); backdrop-filter:blur(8px); }
+  .modal.on{ display:flex; animation:vin .25s ease; }
+  .sheet-m{ width:100%; max-width:360px; background:#141b2e; border:1px solid rgba(255,255,255,.12);
+    border-radius:20px; padding:20px; }
+  .sheet-m h3{ font-size:18px; font-weight:800; margin-bottom:4px; }
+  .sheet-m .sub2{ font-size:13px; color:var(--muted); margin-bottom:14px; }
+  #share-canvas{ width:100%; border-radius:12px; display:block; }
+  .sheet-btns{ display:flex; gap:10px; margin-top:14px; }
+  .sk{ border-radius:12px; background:linear-gradient(100deg, rgba(255,255,255,.05) 40%, rgba(255,255,255,.11) 50%, rgba(255,255,255,.05) 60%);
+    background-size:200% 100%; animation:shimmer 1.3s linear infinite; }
+  @keyframes shimmer{ to{ background-position:-200% 0; } }
+  @media (prefers-reduced-motion: reduce){
+    .sweep{ animation-duration:8s; } .rise,.view{ animation-duration:.01s; } .blip{ animation:none; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+  <div class="langrow"><button id="lang-btn">हिन्दी</button></div>
+
+  <div class="view on" id="v-home">
+    <div class="kicker rise" data-i18n="kicker">SarkariRadar</div>
+    <h1 class="hero rise" style="animation-delay:.08s" data-i18n="hero">Every government scheme you're eligible for. Found in 60 seconds.</h1>
+    <p class="lede rise" style="animation-delay:.14s" data-i18n="lede">Answer 8 quick questions. Our radar scans 30 central government schemes and pings the ones with your name on them — with what you get and how to apply.</p>
+    <div class="radar rise" style="animation-delay:.2s" aria-hidden="true">
+      <svg viewBox="0 0 220 220"><g fill="none" stroke="rgba(240,180,41,.25)" stroke-width="1">
+        <circle cx="110" cy="110" r="100"/><circle cx="110" cy="110" r="66"/><circle cx="110" cy="110" r="33"/>
+        <line x1="110" y1="10" x2="110" y2="210"/><line x1="10" y1="110" x2="210" y2="110"/></g></svg>
+      <div class="sweep"></div>
+      <div class="blip" style="width:12px;height:12px;top:32%;left:60%"></div>
+      <div class="blip" style="width:9px;height:9px;top:62%;left:34%;animation-delay:.6s"></div>
+      <div class="blip" style="width:11px;height:11px;top:48%;left:72%;animation-delay:1.1s"></div>
+    </div>
+    <button class="btn-p rise" style="animation-delay:.26s" id="start-btn" data-i18n="start">Find my schemes →</button>
+    <div class="trust rise" style="animation-delay:.32s">
+      <span data-i18n="t1">✓ 30 verified schemes</span>
+      <span data-i18n="t2">✓ Free forever</span>
+      <span data-i18n="t3">✓ No sign-up</span>
+    </div>
+  </div>
+
+  <div class="view" id="v-quiz">
+    <div class="qbar"><i id="qbar-fill" style="width:0%"></i></div>
+    <div class="q-q" id="q-text"></div>
+    <div class="q-sub" id="q-sub"></div>
+    <div id="q-body"></div>
+    <div class="qnav">
+      <button class="qback" id="q-back">←</button>
+      <button class="btn-p" id="q-next" data-i18n="next">Continue →</button>
+    </div>
+  </div>
+
+  <div class="view" id="v-scan">
+    <div class="scan-wrap">
+      <div class="radar" aria-hidden="true">
+        <svg viewBox="0 0 220 220"><g fill="none" stroke="rgba(240,180,41,.25)" stroke-width="1">
+          <circle cx="110" cy="110" r="100"/><circle cx="110" cy="110" r="66"/><circle cx="110" cy="110" r="33"/>
+          <line x1="110" y1="10" x2="110" y2="210"/><line x1="10" y1="110" x2="210" y2="110"/></g></svg>
+        <div class="sweep"></div>
+        <div id="scan-blips"></div>
+      </div>
+      <div class="scan-t" data-i18n="scanning">Scanning schemes…</div>
+      <div class="scan-s" id="scan-count">0 / 30</div>
+    </div>
+  </div>
+
+  <div class="view" id="v-results">
+    <div class="res-head">
+      <div class="res-n" id="res-n">0</div>
+      <div class="res-l" data-i18n="resl">schemes with your name on them</div>
+      <div class="res-s" id="res-sub"></div>
+    </div>
+    <div id="res-eligible"></div>
+    <div id="res-almost"></div>
+    <button class="btn-p" id="share-btn" data-i18n="sharebtn">Share my results ⤴</button>
+    <button class="btn-s" id="browse-btn" data-i18n="browse">Browse all 30 schemes</button>
+    <button class="btn-s" id="retake-btn" data-i18n="retake">Retake the quiz</button>
+    <div class="src" data-i18n="src">Scheme data verified against official portals · for guidance only, confirm eligibility on the official site before applying</div>
+  </div>
+
+  <div class="view" id="v-browse">
+    <div class="kicker" data-i18n="kicker">SarkariRadar</div>
+    <h1 class="hero" style="font-size:30px" data-i18n="all">All 30 schemes</h1>
+    <div id="browse-list"></div>
+    <button class="btn-s" id="back-res">← <span data-i18n="backres">Back to results</span></button>
+  </div>
+</div>
+
+<div class="detail" id="detail"><div class="dsheet" id="dsheet"></div></div>
+
+<div class="modal" id="share-modal" role="dialog" aria-label="Share results">
+  <div class="sheet-m">
+    <h3 data-i18n="sharet">Share your results</h3>
+    <div class="sub2" data-i18n="shares">A card for WhatsApp, Stories, anywhere.</div>
+    <canvas id="share-canvas" width="1080" height="1350"></canvas>
+    <div class="sheet-btns">
+      <button class="btn-p" id="share-go" style="margin-top:0" data-i18n="share">Share</button>
+      <button class="btn-s" id="share-dl" style="margin-top:0" data-i18n="save">Save</button>
+      <button class="btn-s" id="share-x" style="margin-top:0" data-i18n="close">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let LANG = 'en';
+let SCHEMES = [];
+let profile = {};
+let qi = 0;
+let lastResults = { eligible: [], almost: [] };
+
+const I18N = {
+  en: {
+    kicker: 'SarkariRadar',
+    hero: "Every government scheme you're eligible for. Found in 60 seconds.",
+    lede: "Answer 8 quick questions. Our radar scans 30 central government schemes and pings the ones with your name on them — with what you get and how to apply.",
+    start: "Find my schemes →", t1: "✓ 30 verified schemes", t2: "✓ Free forever", t3: "✓ No sign-up",
+    next: "Continue →", scanning: "Scanning schemes…",
+    resl: "schemes with your name on them", sharebtn: "Share my results ⤴",
+    browse: "Browse all 30 schemes", retake: "Retake the quiz",
+    src: "Scheme data verified against official portals · for guidance only, confirm eligibility on the official site before applying",
+    all: "All 30 schemes", backres: "Back to results",
+    sharet: "Share your results", shares: "A card for WhatsApp, Stories, anywhere.",
+    share: "Share", save: "Save", close: "Close",
+    eligible_h: "Eligible now", almost_h: "Almost eligible",
+    almost_sub: "You're one condition away from these:",
+    howto: "How to apply", details: "Details", why: "Why you qualify",
+    err_age: "Please enter a valid age."
+  },
+  hi: {
+    kicker: 'सरकारीरडार',
+    hero: "हर सरकारी योजना जिसके आप हकदार हैं। 60 सेकंड में।",
+    lede: "8 आसान सवालों के जवाब दें। हमारा रडार 30 केंद्रीय योजनाओं को स्कैन करके वो खोजेगा जो आपके नाम पर हैं — क्या मिलेगा और कैसे आवेदन करें, इसके साथ।",
+    start: "मेरी योजनाएं खोजें →", t1: "✓ 30 सत्यापित योजनाएं", t2: "✓ हमेशा मुफ़्त", t3: "✓ कोई साइन-अप नहीं",
+    next: "आगे बढ़ें →", scanning: "योजनाएं स्कैन हो रही हैं…",
+    resl: "योजनाएं आपके नाम पर हैं", sharebtn: "अपना परिणाम शेयर करें ⤴",
+    browse: "सभी 30 योजनाएं देखें", retake: "क्विज़ दोबारा दें",
+    src: "योजना डेटा आधिकारिक पोर्टलों से सत्यापित · केवल मार्गदर्शन हेतु, आवेदन से पहले आधिकारिक साइट पर पात्रता जांचें",
+    all: "सभी 30 योजनाएं", backres: "परिणामों पर वापस जाएं",
+    sharet: "अपना परिणाम शेयर करें", shares: "WhatsApp, Stories, कहीं भी के लिए कार्ड।",
+    share: "शेयर करें", save: "सेव करें", close: "बंद करें",
+    eligible_h: "अभी पात्र", almost_h: "लगभग पात्र",
+    almost_sub: "इनके लिए आप एक शर्त दूर हैं:",
+    howto: "आवेदन कैसे करें", details: "विवरण", why: "आप क्यों पात्र हैं",
+    err_age: "कृपया सही उम्र दर्ज करें।"
+  }
+};
+function t(k){ return (I18N[LANG] && I18N[LANG][k]) || I18N.en[k] || k; }
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  $('lang-btn').textContent = LANG === 'en' ? 'हिन्दी' : 'English';
+  document.documentElement.lang = LANG === 'hi' ? 'hi' : 'en';
+}
+$('lang-btn').addEventListener('click', () => {
+  LANG = LANG === 'en' ? 'hi' : 'en';
+  applyI18n();
+  if ($('v-quiz').classList.contains('on')) renderQ();
+  if (lastResults.eligible.length && $('v-results').classList.contains('on')) renderResults();
+});
+
+const STATES = ["Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Ladakh","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Puducherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+
+const INCOME_B = [
+  { v:'b1', en:'Under ₹1 lakh', hi:'₹1 लाख से कम', min:0, max:100000 },
+  { v:'b2', en:'₹1 – 2.5 lakh', hi:'₹1 – 2.5 लाख', min:100000, max:250000 },
+  { v:'b3', en:'₹2.5 – 5 lakh', hi:'₹2.5 – 5 लाख', min:250000, max:500000 },
+  { v:'b4', en:'₹5 – 8 lakh', hi:'₹5 – 8 लाख', min:500000, max:800000 },
+  { v:'b5', en:'Above ₹8 lakh', hi:'₹8 लाख से अधिक', min:800000, max:Infinity }
+];
+
+const QUESTIONS = [
+  { id:'age', type:'number', q:{en:'How old are you?',hi:'आपकी उम्र क्या है?'} },
+  { id:'gender', type:'choice', q:{en:'Your gender?',hi:'आपका लिंग?'},
+    options:[{v:'male',en:'Male',hi:'पुरुष'},{v:'female',en:'Female',hi:'महिला'},{v:'other',en:'Other',hi:'अन्य'}] },
+  { id:'state', type:'state', q:{en:'Which state do you live in?',hi:'आप किस राज्य में रहते हैं?'} },
+  { id:'category', type:'choice', q:{en:'Your category?',hi:'आपकी श्रेणी?'},
+    options:[{v:'General',en:'General',hi:'सामान्य'},{v:'EWS',en:'EWS',hi:'ईडब्ल्यूएस'},{v:'OBC',en:'OBC',hi:'ओबीसी'},{v:'SC',en:'SC',hi:'एससी'},{v:'ST',en:'ST',hi:'एसटी'}] },
+  { id:'occupation', type:'choice', q:{en:'What best describes you?',hi:'आप क्या करते हैं?'},
+    options:[
+      {v:'student',en:'Student',hi:'छात्र'},
+      {v:'farmer',en:'Farmer',hi:'किसान'},
+      {v:'unemployed',en:'Looking for work',hi:'काम की तलाश में'},
+      {v:'small business owner',en:'Small business owner',hi:'छोटा व्यवसायी'},
+      {v:'artisan',en:'Artisan / craftsperson',hi:'कारीगर'},
+      {v:'salaried',en:'Salaried employee',hi:'वेतनभोगी'},
+      {v:'homemaker',en:'Homemaker',hi:'गृहिणी'},
+      {v:'senior',en:'Senior citizen',hi:'वरिष्ठ नागरिक'}
+    ] },
+  { id:'income', type:'choice', q:{en:'Annual family income?',hi:'पारिवारिक वार्षिक आय?'},
+    options: INCOME_B },
+  { id:'education', type:'choice', q:{en:'Highest education?',hi:'उच्चतम शिक्षा?'},
+    options:[{v:'below10',en:'Below 10th',hi:'10वीं से कम'},{v:'10th',en:'10th pass',hi:'10वीं पास'},{v:'12th',en:'12th pass',hi:'12वीं पास'},{v:'graduate',en:'Graduate',hi:'स्नातक'},{v:'pg',en:'Postgraduate',hi:'परास्नातक'}] },
+  { id:'special', type:'multi', q:{en:'Do any of these apply to you?',hi:'इनमें से कोई आप पर लागू होता है?'},
+    options:[{v:'disability',en:'Person with disability',hi:'दिव्यांगजन'},{v:'minority',en:'Minority community',hi:'अल्पसंख्यक समुदाय'},{v:'exserviceman',en:'Ex-serviceman',hi:'पूर्व सैनिक'},{v:'none',en:'None of these',hi:'इनमें से कोई नहीं'}] }
+];
+
+function show(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  $(id).classList.add('on');
+  scrollTo(0,0);
+}
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function optLabel(o){ return LANG === 'hi' ? (o.hi || o.en) : o.en; }
+
+function renderQ(){
+  const q = QUESTIONS[qi];
+  $('qbar-fill').style.width = ((qi) / QUESTIONS.length * 100) + '%';
+  $('q-text').textContent = LANG === 'hi' ? q.q.hi : q.q.en;
+  $('q-sub').textContent = `Question ${qi+1} of ${QUESTIONS.length}`;
+  const body = $('q-body');
+  const cur = profile[q.id];
+  if (q.type === 'number'){
+    body.innerHTML = `<input class="numin" id="age-in" type="number" inputmode="numeric" min="1" max="120" placeholder="—" value="${cur || ''}">`;
+    setTimeout(() => $('age-in').focus(), 350);
+  } else if (q.type === 'state'){
+    body.innerHTML = `<select class="state" id="state-sel"><option value="">— ${LANG==='hi'?'चुनें':'Select'} —</option>` +
+      STATES.map(s => `<option ${cur===s?'selected':''}>${s}</option>`).join('') + `</select>`;
+  } else if (q.type === 'multi'){
+    const sel = Array.isArray(cur) ? cur : [];
+    body.innerHTML = `<div class="opts">` + q.options.map(o =>
+      `<button class="opt ${sel.includes(o.v)?'sel':''}" data-v="${o.v}"><span>${optLabel(o)}</span><span class="tick">${sel.includes(o.v)?'✓':''}</span></button>`
+    ).join('') + `</div>`;
+    body.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+      let s = Array.isArray(profile.special) ? [...profile.special] : [];
+      const v = b.dataset.v;
+      if (v === 'none'){ s = ['none']; }
+      else {
+        s = s.filter(x => x !== 'none');
+        s = s.includes(v) ? s.filter(x => x !== v) : [...s, v];
+      }
+      profile.special = s;
+      renderQ();
+    }));
+  } else {
+    body.innerHTML = `<div class="opts">` + q.options.map(o =>
+      `<button class="opt ${cur===o.v?'sel':''}" data-v="${esc(o.v)}"><span>${optLabel(o)}</span><span class="tick">${cur===o.v?'✓':''}</span></button>`
+    ).join('') + `</div>`;
+    body.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+      profile[q.id] = b.dataset.v;
+      setTimeout(nextQ, 220);
+    }));
+  }
+}
+function validQ(){
+  const q = QUESTIONS[qi];
+  if (q.type === 'number'){
+    const v = parseInt(($('age-in') || {}).value, 10);
+    if (!v || v < 1 || v > 120){ alert(t('err_age')); return false; }
+    profile.age = v; return true;
+  }
+  if (q.type === 'state'){
+    const v = $('state-sel').value;
+    if (!v) return false;
+    profile.state = v; return true;
+  }
+  if (q.type === 'multi'){
+    if (!profile.special || !profile.special.length) return false;
+    return true;
+  }
+  return !!profile[q.id];
+}
+function nextQ(){
+  if (!validQ()) return;
+  if (qi < QUESTIONS.length - 1){ qi++; renderQ(); }
+  else runScan();
+}
+$('q-next').addEventListener('click', nextQ);
+$('q-back').addEventListener('click', () => {
+  if (qi > 0){ qi--; renderQ(); }
+  else show('v-home');
+});
+$('start-btn').addEventListener('click', () => { profile = {}; qi = 0; show('v-quiz'); renderQ(); });
+
+/* ---------- matching engine ---------- */
+function annualCap(e){
+  if (e.maxIncome == null) return null;
+  return e.maxIncome <= 20000 ? e.maxIncome * 12 : e.maxIncome; // monthly caps stored raw
+}
+function matchScheme(s, p){
+  const e = s.eligibility;
+  const fails = [], whys = [];
+  // custom rules first
+  if (s.id === 'stand-up-india'){
+    const ok = (p.category === 'SC' || p.category === 'ST') || p.gender === 'female';
+    if (!ok) fails.push({ k:'rule', msg: LANG==='hi' ? 'SC/ST या महिला उद्यमी होना चाहिए' : 'Must be SC/ST, or a woman entrepreneur' });
+    else whys.push(LANG==='hi' ? 'पात्रता मानदंड' : 'Meets the criteria');
+    return { fails, whys };
+  }
+  if (e.minAge != null){
+    if (p.age < e.minAge) fails.push({ k:'age', msg:(LANG==='hi'?'उम्र कम से कम ':'Need age ') + e.minAge + '+' });
+    else whys.push((LANG==='hi'?'उम्र ':'Age ') + p.age);
+  }
+  if (e.maxAge != null){
+    if (p.age > e.maxAge) fails.push({ k:'age', msg:(LANG==='hi'?'अधिकतम उम्र ':'Max age ') + e.maxAge });
+  }
+  if (!e.genders.includes('any') && !e.genders.includes(p.gender)){
+    fails.push({ k:'gender', msg: LANG==='hi' ? 'केवल महिलाओं के लिए' : 'Women only' });
+  } else if (e.genders.includes('female') && p.gender === 'female'){
+    whys.push(LANG==='hi'?'महिला':'Woman');
+  }
+  const cap = annualCap(e);
+  if (cap != null){
+    const inc = INCOME_B.find(b => b.v === p.income);
+    if (inc.min >= cap) fails.push({ k:'income', msg:(LANG==='hi'?'आय सीमा ₹':'Income cap ₹') + cap.toLocaleString('en-IN') });
+    else {
+      whys.push((LANG==='hi'?'आय सीमा के अंदर':'Income within limit'));
+      if (inc.max > cap) whys.push(LANG==='hi'?'सीमा जांचें':'Check the cap');
+    }
+  }
+  if (!e.categories.includes('any') && !e.categories.includes(p.category)){
+    fails.push({ k:'category', msg:(LANG==='hi'?'श्रेणी मेल नहीं खाती':'Category mismatch')});
+  }
+  if (!e.occupations.includes('any') && !e.occupations.includes(p.occupation)){
+    fails.push({ k:'occupation', msg:(LANG==='hi'?'व्यवसाय मेल नहीं खाता':'Occupation mismatch')});
+  }
+  return { fails, whys };
+}
+function runScan(){
+  show('v-scan');
+  const total = SCHEMES.length;
+  let i = 0;
+  const blips = $('scan-blips');
+  blips.innerHTML = '';
+  const timer = setInterval(() => {
+    i += 2;
+    if (i >= total){
+      clearInterval(timer);
+      setTimeout(showResults, 500);
+      return;
+    }
+    $('scan-count').textContent = `${Math.min(i,total)} / ${total}`;
+    if (Math.random() < .5){
+      const b = document.createElement('div');
+      b.className = 'blip';
+      const sz = 7 + Math.random()*6;
+      b.style.cssText = `width:${sz}px;height:${sz}px;top:${20+Math.random()*60}%;left:${20+Math.random()*60}%`;
+      blips.appendChild(b);
+      if (blips.children.length > 6) blips.removeChild(blips.firstChild);
+    }
+  }, 90);
+}
+function showResults(){
+  const eligible = [], almost = [];
+  for (const s of SCHEMES){
+    const { fails, whys } = matchScheme(s, profile);
+    if (!fails.length) eligible.push({ s, whys });
+    else if (fails.length === 1) almost.push({ s, fail: fails[0] });
+  }
+  lastResults = { eligible, almost };
+  renderResults();
+  show('v-results');
+}
+function schemeName(s){ return LANG === 'hi' ? (s.name_hi || s.name) : s.name; }
+function cardHTML(item, isAlmost){
+  const s = item.s;
+  const why = isAlmost
+    ? `<div class="miss">⚠ ${esc(item.fail.msg)}</div>`
+    : `<div class="why">${item.whys.slice(0,3).map(w => `<span>✓ ${esc(w)}</span>`).join('')}</div>`;
+  return `<div class="card rise ${isAlmost?'almost':''}" data-id="${s.id}">
+    <h3>${esc(schemeName(s))}</h3>
+    ${LANG==='en' && s.name_hi ? `<div class="hi">${esc(s.name_hi)}</div>` : ''}
+    <div><span class="benefit">${esc(s.benefit)}</span></div>
+    ${why}
+    <div class="apply">
+      <a href="${esc(s.apply.url)}" target="_blank" rel="noopener">${t('howto')} ↗</a>
+      <button data-det="${s.id}">${t('details')}</button>
+    </div>
+    <div class="notes" id="notes-${s.id}">${esc(s.eligibility.notes || '')}<br><br><span style="opacity:.7">Source: ${esc(s.source)}</span></div>
+  </div>`;
+}
+function renderResults(){
+  const { eligible, almost } = lastResults;
+  $('res-n').textContent = eligible.length;
+  $('res-sub').textContent = almost.length
+    ? (LANG==='hi' ? `${almost.length} और लगभग पात्र` : `${almost.length} more almost eligible`)
+    : '';
+  $('res-eligible').innerHTML =
+    (eligible.length ? `<div class="sec-t">${t('eligible_h')}</div>` : '') +
+    eligible.map(e => cardHTML(e, false)).join('');
+  $('res-almost').innerHTML = almost.length
+    ? `<div class="sec-t">${t('almost_h')}</div><div class="res-s" style="margin-bottom:4px">${t('almost_sub')}</div>` +
+      almost.map(a => cardHTML(a, true)).join('')
+    : '';
+  bindCards();
+}
+function bindCards(){
+  document.querySelectorAll('[data-det]').forEach(b => b.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    const id = b.dataset.det;
+    const n = $('notes-' + CSS.escape(id));
+    if (n) n.classList.toggle('on');
+  }));
+  document.querySelectorAll('.card h3').forEach(h => h.addEventListener('click', () => {
+    openDetail(h.closest('.card').dataset.id);
+  }));
+}
+function openDetail(id){
+  const s = SCHEMES.find(x => x.id === id);
+  if (!s) return;
+  const e = s.eligibility;
+  const row = (k, v) => v ? `<div class="kv"><b>${k}</b><span>${esc(v)}</span></div>` : '';
+  $('dsheet').innerHTML =
+    `<h2>${esc(schemeName(s))}</h2>
+     ${LANG==='en' && s.name_hi ? `<div class="hi" style="font-size:14px;color:var(--muted);margin-top:4px">${esc(s.name_hi)}</div>` : ''}
+     <div style="margin:12px 0"><span class="benefit">${esc(s.benefit)}</span></div>
+     <div style="font-size:15px;line-height:1.6;margin-bottom:8px">${esc(s.desc)}</div>
+     ${row(LANG==='hi'?'न्यूनतम उम्र':'Min age', e.minAge)}
+     ${row(LANG==='hi'?'अधिकतम उम्र':'Max age', e.maxAge)}
+     ${row(LANG==='hi'?'लिंग':'Gender', e.genders.join(', '))}
+     ${row(LANG==='hi'?'आय सीमा':'Income cap', e.maxIncome ? '₹' + e.maxIncome.toLocaleString('en-IN') + (e.maxIncome<=20000?' /month':' /year') : '—')}
+     ${row(LANG==='hi'?'श्रेणी':'Category', e.categories.join(', '))}
+     ${row(LANG==='hi'?'व्यवसाय':'Occupation', e.occupations.join(', '))}
+     ${e.notes ? `<div style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:10px">${esc(e.notes)}</div>` : ''}
+     <div class="apply" style="margin-top:16px">
+       <a href="${esc(s.apply.url)}" target="_blank" rel="noopener">${t('howto')} ↗</a>
+       <button id="det-x">${t('close')}</button>
+     </div>`;
+  $('detail').classList.add('on');
+  $('det-x').addEventListener('click', () => $('detail').classList.remove('on'));
+}
+$('detail').addEventListener('click', (e) => {
+  if (e.target.id === 'detail') $('detail').classList.remove('on');
+});
+$('retake-btn').addEventListener('click', () => { profile = {}; qi = 0; show('v-quiz'); renderQ(); });
+$('browse-btn').addEventListener('click', () => {
+  $('browse-list').innerHTML = SCHEMES.map(s =>
+    `<div class="card rise" data-id="${s.id}"><h3>${esc(schemeName(s))}</h3>
+     <div><span class="benefit">${esc(s.benefit)}</span></div></div>`
+  ).join('');
+  bindCards();
+  show('v-browse');
+});
+$('back-res').addEventListener('click', () => show('v-results'));
+
+/* ---------- share card ---------- */
+function drawShareCard(){
+  const { eligible } = lastResults;
+  const cv = $('share-canvas');
+  const c = cv.getContext('2d');
+  const W = 1080, H = 1350;
+  c.fillStyle = '#0a0e1a'; c.fillRect(0, 0, W, H);
+  const g = c.createRadialGradient(W/2, -60, 60, W/2, -60, 560);
+  g.addColorStop(0, 'rgba(240,180,41,.35)'); g.addColorStop(1, 'rgba(10,14,26,0)');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  // radar rings
+  c.strokeStyle = 'rgba(240,180,41,.25)'; c.lineWidth = 2;
+  [300, 200, 100].forEach(r => { c.beginPath(); c.arc(W/2, 300, r, 0, Math.PI*2); c.stroke(); });
+  c.fillStyle = '#f0b429';
+  c.beginPath(); c.arc(W/2, 300, 16, 0, Math.PI*2); c.fill();
+  c.textAlign = 'center';
+  c.fillStyle = '#f0b429'; c.font = '800 40px Archivo, sans-serif';
+  c.fillText(LANG==='hi' ? 'सरकारीरडार' : 'SARKARIRADAR', W/2, 560);
+  c.fillStyle = '#f2f4f7'; c.font = '900 300px Archivo, sans-serif';
+  c.fillText(String(eligible.length), W/2, 880);
+  c.font = '700 54px Archivo, sans-serif';
+  c.fillText(LANG==='hi' ? 'योजनाएं मेरे नाम पर' : 'schemes with my name on them', W/2, 970);
+  c.fillStyle = '#8b94a7'; c.font = '600 36px Archivo, sans-serif';
+  const top = eligible.slice(0, 3).map(e => (LANG==='hi' ? (e.s.name_hi || e.s.name) : e.s.name).split('(')[0].trim().slice(0, 34));
+  top.forEach((nm, i) => c.fillText('✓ ' + nm, W/2, 1070 + i * 52));
+  c.fillStyle = '#5b6373'; c.font = '600 32px Archivo, sans-serif';
+  c.fillText('sarkariradar.vercel.app', W/2, H - 80);
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+$('share-btn').addEventListener('click', async () => {
+  $('share-modal').classList.add('on');
+  await document.fonts.ready;
+  drawShareCard();
+});
+$('share-x').addEventListener('click', () => $('share-modal').classList.remove('on'));
+$('share-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'share-modal') $('share-modal').classList.remove('on');
+});
+async function shareFile(dlOnly){
+  const blob = await drawShareCard();
+  const file = new File([blob], 'sarkariradar.png', { type: 'image/png' });
+  if (!dlOnly && navigator.canShare && navigator.canShare({ files: [file] })){
+    try { await navigator.share({ files: [file], title: 'SarkariRadar' }); return; } catch (e) {}
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sarkariradar.png';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+$('share-go').addEventListener('click', () => shareFile(false));
+$('share-dl').addEventListener('click', () => shareFile(true));
+
+/* ---------- boot ---------- */
+fetch('schemes.json').then(r => r.json()).then(d => {
+  SCHEMES = d.schemes || [];
+  applyI18n();
+}).catch(() => {
+  document.body.innerHTML = '<div style="padding:60px 24px;text-align:center">Could not load scheme data. Check your connection.</div>';
+});
+</script>
+</body></html>
