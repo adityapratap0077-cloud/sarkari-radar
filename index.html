@@ -287,7 +287,8 @@ const INCOME_B = [
   { v:'b2', en:'₹1 – 2.5 lakh', hi:'₹1 – 2.5 लाख', min:100000, max:250000 },
   { v:'b3', en:'₹2.5 – 5 lakh', hi:'₹2.5 – 5 लाख', min:250000, max:500000 },
   { v:'b4', en:'₹5 – 8 lakh', hi:'₹5 – 8 लाख', min:500000, max:800000 },
-  { v:'b5', en:'Above ₹8 lakh', hi:'₹8 लाख से अधिक', min:800000, max:Infinity }
+  { v:'b5', en:'Above ₹8 lakh', hi:'₹8 लाख से अधिक', min:800000, max:Infinity },
+  { v:'unknown', en:'Not sure', hi:'पता नहीं', min:0, max:Infinity }
 ];
 
 const QUESTIONS = [
@@ -429,11 +430,15 @@ function matchScheme(s, p){
   }
   const cap = annualCap(e);
   if (cap != null){
-    const inc = INCOME_B.find(b => b.v === p.income);
-    if (inc.min >= cap) fails.push({ k:'income', msg:(LANG==='hi'?'आय सीमा ₹':'Income cap ₹') + cap.toLocaleString('en-IN') });
-    else {
-      whys.push((LANG==='hi'?'आय सीमा के अंदर':'Income within limit'));
-      if (inc.max > cap) whys.push(LANG==='hi'?'सीमा जांचें':'Check the cap');
+    if (p.income === 'unknown'){
+      whys.push(LANG==='hi'?'आय सीमा जांचें':'Check the income cap');
+    } else {
+      const inc = INCOME_B.find(b => b.v === p.income);
+      if (inc.min >= cap) fails.push({ k:'income', msg:(LANG==='hi'?'आय सीमा ₹':'Income cap ₹') + cap.toLocaleString('en-IN') });
+      else {
+        whys.push((LANG==='hi'?'आय सीमा के अंदर':'Income within limit'));
+        if (inc.max > cap) whys.push(LANG==='hi'?'सीमा जांचें':'Check the cap');
+      }
     }
   }
   if (!e.categories.includes('any') && !e.categories.includes(p.category)){
