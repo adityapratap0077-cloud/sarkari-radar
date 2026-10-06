@@ -73,6 +73,7 @@
     font-family:inherit; font-size:34px; font-weight:800; padding:18px; border-radius:16px; margin-top:22px;
     text-align:center; outline:none; font-variant-numeric:tabular-nums; }
   .numin:focus{ border-color:var(--amber); }
+  .field-error{ color:#ff8f8f; font-size:14px; font-weight:700; margin-top:10px; text-align:center; }
   select.state{ width:100%; background:#141b2e; border:1px solid rgba(255,255,255,.14); color:#fff;
     font-family:inherit; font-size:16px; font-weight:600; padding:16px; border-radius:14px; margin-top:22px; outline:none; }
 
@@ -336,7 +337,7 @@ function renderQ(){
   const body = $('q-body');
   const cur = profile[q.id];
   if (q.type === 'number'){
-    body.innerHTML = `<input class="numin" id="age-in" type="number" inputmode="numeric" min="1" max="120" placeholder="—" value="${cur || ''}">`;
+    body.innerHTML = `<input class="numin" id="age-in" type="number" inputmode="numeric" min="1" max="120" placeholder="—" value="${cur || ''}" aria-describedby="age-err"><p class="field-error" id="age-err" aria-live="polite" hidden></p>`;
     setTimeout(() => $('age-in').focus(), 350);
   } else if (q.type === 'state'){
     body.innerHTML = `<select class="state" id="state-sel"><option value="">— ${LANG==='hi'?'चुनें':'Select'} —</option>` +
@@ -371,7 +372,12 @@ function validQ(){
   const q = QUESTIONS[qi];
   if (q.type === 'number'){
     const v = parseInt(($('age-in') || {}).value, 10);
-    if (!v || v < 1 || v > 120){ alert(t('err_age')); return false; }
+    const errEl = $('age-err');
+    if (!v || v < 1 || v > 120){
+      if (errEl){ errEl.textContent = t('err_age'); errEl.hidden = false; }
+      return false;
+    }
+    if (errEl){ errEl.hidden = true; errEl.textContent = ''; }
     profile.age = v; return true;
   }
   if (q.type === 'state'){
