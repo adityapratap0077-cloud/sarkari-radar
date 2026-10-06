@@ -143,9 +143,9 @@
   <div class="langrow"><span class="wordmark" data-i18n="kicker">SarkariRadar</span><button id="lang-btn">हिन्दी</button></div>
 
   <div class="view on" id="v-home">
-    <h1 class="hero rise" style="animation-delay:.08s" data-i18n="hero">Every government scheme you're eligible for. Found in 60 seconds.</h1>
-    <p class="lede rise" style="animation-delay:.14s" data-i18n="lede">Answer 8 quick questions. Our radar scans 30 central government schemes and pings the ones with your name on them — with what you get and how to apply.</p>
-    <div class="radar rise" style="animation-delay:.2s" aria-hidden="true">
+    <h1 class="hero" data-i18n="hero">Every government scheme you're eligible for. Found in 60 seconds.</h1>
+    <p class="lede" data-i18n="lede">Answer 8 quick questions. Our radar scans 30 central government schemes and pings the ones with your name on them — with what you get and how to apply.</p>
+    <div class="radar" aria-hidden="true">
       <svg viewBox="0 0 220 220"><g fill="none" stroke="rgba(240,180,41,.25)" stroke-width="1">
         <circle cx="110" cy="110" r="100"/><circle cx="110" cy="110" r="66"/><circle cx="110" cy="110" r="33"/>
         <line x1="110" y1="10" x2="110" y2="210"/><line x1="10" y1="110" x2="210" y2="110"/></g></svg>
@@ -154,8 +154,8 @@
       <div class="blip" style="width:9px;height:9px;top:62%;left:34%;animation-delay:.6s"></div>
       <div class="blip" style="width:11px;height:11px;top:48%;left:72%;animation-delay:1.1s"></div>
     </div>
-    <button class="btn-p rise" style="animation-delay:.26s" id="start-btn" data-i18n="start">Find my schemes →</button>
-    <div class="trust rise" style="animation-delay:.32s">
+    <button class="btn-p" id="start-btn" data-i18n="start">Find my schemes →</button>
+    <div class="trust">
       <span data-i18n="t1">✓ 30 verified schemes</span>
       <span data-i18n="t2">✓ Free forever</span>
       <span data-i18n="t3">✓ No sign-up</span>
@@ -496,7 +496,7 @@ function cardHTML(item, isAlmost){
   const why = isAlmost
     ? `<div class="miss">⚠ ${esc(item.fail.msg)}</div>`
     : `<div class="why">${item.whys.slice(0,3).map(w => `<span>✓ ${esc(w)}</span>`).join('')}</div>`;
-  return `<div class="card rise ${isAlmost?'almost':''}" data-id="${s.id}">
+  return `<div class="card ${isAlmost?'almost':''}" data-id="${s.id}">
     <h3>${esc(schemeName(s))}</h3>
     ${LANG==='en' && s.name_hi ? `<div class="hi">${esc(s.name_hi)}</div>` : ''}
     <div><span class="benefit">${esc(s.benefit)}</span></div>
@@ -567,7 +567,7 @@ $('detail').addEventListener('click', (e) => {
 $('retake-btn').addEventListener('click', () => { profile = {}; qi = 0; show('v-quiz'); renderQ(); });
 $('browse-btn').addEventListener('click', () => {
   $('browse-list').innerHTML = SCHEMES.map(s =>
-    `<div class="card rise" data-id="${s.id}"><h3>${esc(schemeName(s))}</h3>
+    `<div class="card" data-id="${s.id}"><h3>${esc(schemeName(s))}</h3>
      <div><span class="benefit">${esc(s.benefit)}</span></div></div>`
   ).join('');
   bindCards();
