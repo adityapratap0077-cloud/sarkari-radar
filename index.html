@@ -16,8 +16,6 @@
   :root{ --ink:#0a0e1a; --ink2:#101623; --paper:#f2f4f7; --muted:#8b94a7; --amber:#f0b429; --amber-deep:#b97f0a; --green:#22c55e; }
   html,body{ height:100%; }
   body{ background:var(--ink); color:var(--paper); font-family:'Archivo',system-ui,sans-serif; overflow-x:hidden; }
-  .grain{ position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
   .wrap{ max-width:480px; margin:0 auto; min-height:100dvh; position:relative; display:flex; flex-direction:column; }
   .view{ display:none; padding:28px 24px 40px; animation:vin .35s cubic-bezier(.2,.7,.2,1); flex:1; }
   .view.on{ display:block; }
@@ -139,7 +137,6 @@
 </style>
 </head>
 <body>
-<div class="grain"></div>
 <div class="wrap">
   <div class="langrow"><button id="lang-btn">हिन्दी</button></div>
 
