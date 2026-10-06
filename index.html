@@ -247,7 +247,10 @@ const I18N = {
     eligible_h: "Eligible now", almost_h: "Almost eligible",
     almost_sub: "You're one condition away from these:",
     howto: "How to apply", details: "Details", why: "Why you qualify",
-    err_age: "Please enter a valid age."
+    err_age: "Please enter a valid age.",
+    nohits: "No direct hits",
+    nohits_sub: "But {n} are close: see the almost-eligible list below.",
+    nohits_none: "Browse all 30 schemes below to explore."
   },
   hi: {
     kicker: 'सरकारीरडार',
@@ -264,7 +267,10 @@ const I18N = {
     eligible_h: "अभी पात्र", almost_h: "लगभग पात्र",
     almost_sub: "इनके लिए आप एक शर्त दूर हैं:",
     howto: "आवेदन कैसे करें", details: "विवरण", why: "आप क्यों पात्र हैं",
-    err_age: "कृपया सही उम्र दर्ज करें।"
+    err_age: "कृपया सही उम्र दर्ज करें।",
+    nohits: "कोई सीधा मिलान नहीं",
+    nohits_sub: "लेकिन {n} करीब हैं: नीचे लगभग-पात्र सूची देखें।",
+    nohits_none: "सभी 30 योजनाएं नीचे ब्राउज़ करके देखें।"
   }
 };
 function t(k){ return (I18N[LANG] && I18N[LANG][k]) || I18N.en[k] || k; }
@@ -510,7 +516,10 @@ function renderResults(){
     : '';
   $('res-eligible').innerHTML =
     (eligible.length ? `<div class="sec-t">${t('eligible_h')}</div>` : '') +
-    eligible.map(e => cardHTML(e, false)).join('');
+    eligible.map(e => cardHTML(e, false)).join('') +
+    (!eligible.length ? `<div class="card"><h3>${t('nohits')}</h3><div class="res-s" style="margin-top:6px">${
+      almost.length ? t('nohits_sub').replace('{n}', almost.length) : t('nohits_none')
+    }</div></div>` : '');
   $('res-almost').innerHTML = almost.length
     ? `<div class="sec-t">${t('almost_h')}</div><div class="res-s" style="margin-bottom:4px">${t('almost_sub')}</div>` +
       almost.map(a => cardHTML(a, true)).join('')
