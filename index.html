@@ -13,10 +13,21 @@
 <title>SarkariRadar — every government scheme you're eligible for</title>
 <meta name="description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. SarkariRadar checks 30 curated central schemes and shows eligible and almost-eligible results in Hindi or English.">
 <link rel="canonical" href="https://sarkari-radar.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SarkariRadar">
+<meta property="og:title" content="SarkariRadar — every government scheme you're eligible for">
+<meta property="og:description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. SarkariRadar checks 30 curated central schemes and shows eligible and almost-eligible results in Hindi or English.">
+<meta property="og:url" content="https://sarkari-radar.vercel.app/">
+<meta property="og:image" content="https://sarkari-radar.vercel.app/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SarkariRadar — every government scheme you're eligible for">
+<meta name="twitter:description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. 30 curated central schemes, in Hindi or English.">
+<meta name="twitter:image" content="https://sarkari-radar.vercel.app/icon-512.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"Person","@id":"https://adityapratapjhansi.vercel.app/about.html#aditya-pratap","name":"Aditya Pratap","url":"https://adityapratapjhansi.vercel.app/about.html","sameAs":["https://github.com/adityapratap0077-cloud","https://www.linkedin.com/in/aditya-pratap-1244a7383/"]},
-{"@type":"WebSite","name":"SarkariRadar","url":"https://sarkari-radar.vercel.app/","author":{"@id":"https://adityapratapjhansi.vercel.app/about.html#aditya-pratap"}}
+{"@type":"WebSite","name":"SarkariRadar","url":"https://sarkari-radar.vercel.app/","author":{"@id":"https://adityapratapjhansi.vercel.app/about.html#aditya-pratap"}},
+{"@type":"Organization","name":"SarkariRadar","url":"https://sarkari-radar.vercel.app/","logo":"https://sarkari-radar.vercel.app/icon-512.png","founder":{"@id":"https://adityapratapjhansi.vercel.app/about.html#aditya-pratap"}}
 ]}
 </script>
 
@@ -46,7 +57,7 @@
 
   /* type */
   .wordmark{ font-size:14px; font-weight:800; letter-spacing:.06em; color:var(--amber); }
-  h1.hero{ font-size:40px; font-weight:900; letter-spacing:-.03em; line-height:1.05; margin-top:12px; font-stretch:115%; }
+  h1.hero, h2.hero{ font-size:40px; font-weight:900; letter-spacing:-.03em; line-height:1.05; margin-top:12px; font-stretch:115%; }
   .lede{ font-size:16px; color:var(--muted); line-height:1.6; margin-top:14px; max-width:34ch; }
   .btn-p{ display:block; width:100%; background:var(--amber); color:#0a0e1a; border:none; font-family:inherit;
     font-weight:800; font-size:17px; padding:17px; border-radius:16px; cursor:pointer; margin-top:26px;
@@ -219,11 +230,11 @@
   </div>
 
   <div class="view" id="v-browse">
-    <h1 class="hero" style="font-size:30px" data-i18n="all">All 30 schemes</h1>
+    <h2 class="hero" style="font-size:30px" data-i18n="all">All 30 schemes</h2>
     <div id="browse-list"></div>
     <button class="btn-s has-ic" id="back-res"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="backres">Back to results</span></button>
   </div>
-  <footer style="text-align:center; padding:18px 24px 28px; font-size:12px; color:#8b94a7;"><a href="https://adityapratapjhansi.vercel.app/about.html">Built by Aditya Pratap</a></footer>
+  <footer style="text-align:center; padding:18px 24px 28px; font-size:12px; color:#8b94a7; line-height:1.9;"><a href="https://adityapratapjhansi.vercel.app/about.html">Built by Aditya Pratap</a> · <a href="/privacy.html">Privacy</a><br>More by Aditya Pratap: <a href="https://aqi-alarm.vercel.app">AQI Alarm</a> · <a href="https://ledgerlabapp.vercel.app">LedgerLab</a></footer>
 </div>
 
 <div class="detail" id="detail"><div class="dsheet" id="dsheet"></div></div>
