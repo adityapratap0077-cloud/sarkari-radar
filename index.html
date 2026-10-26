@@ -14,17 +14,17 @@
 <link rel="icon" type="image/png" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <title>SarkariRadar — every government scheme you're eligible for</title>
-<meta name="description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. SarkariRadar checks 30 curated central schemes and shows eligible and almost-eligible results in Hindi or English.">
+<meta name="description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. SarkariRadar checks 35 curated central schemes and shows eligible and almost-eligible results in Hindi or English.">
 <link rel="canonical" href="https://sarkari-radar.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SarkariRadar">
 <meta property="og:title" content="SarkariRadar — every government scheme you're eligible for">
-<meta property="og:description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. SarkariRadar checks 30 curated central schemes and shows eligible and almost-eligible results in Hindi or English.">
+<meta property="og:description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. SarkariRadar checks 35 curated central schemes and shows eligible and almost-eligible results in Hindi or English.">
 <meta property="og:url" content="https://sarkari-radar.vercel.app/">
 <meta property="og:image" content="https://sarkari-radar.vercel.app/icon-512.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SarkariRadar — every government scheme you're eligible for">
-<meta name="twitter:description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. 30 curated central schemes, in Hindi or English.">
+<meta name="twitter:description" content="Answer 8 quick questions to find which Indian government schemes you are eligible for. 35 curated central schemes, in Hindi or English.">
 <meta name="twitter:image" content="https://sarkari-radar.vercel.app/icon-512.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
@@ -175,7 +175,7 @@
 
   <div class="view on" id="v-home">
     <h1 class="hero" data-i18n="hero">Every government scheme you're eligible for. Found in 60 seconds.</h1>
-    <p class="lede" data-i18n="lede">Answer 8 quick questions. Our radar scans 30 central government schemes and pings the ones with your name on them — with what you get and how to apply.</p>
+    <p class="lede" data-i18n="lede">Answer 8 quick questions. Our radar scans 35 central government schemes and pings the ones with your name on them — with what you get and how to apply.</p>
     <div class="radar" aria-hidden="true">
       <svg viewBox="0 0 220 220"><g fill="none" stroke="rgba(240,180,41,.25)" stroke-width="1">
         <circle cx="110" cy="110" r="100"/><circle cx="110" cy="110" r="66"/><circle cx="110" cy="110" r="33"/>
@@ -187,7 +187,7 @@
     </div>
     <button class="btn-p has-ic" id="start-btn"><span data-i18n="start">Find my schemes</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
     <div class="trust">
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg><span data-i18n="t1">30 verified schemes</span></span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg><span data-i18n="t1">35 verified schemes</span></span>
       <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg><span data-i18n="t2">Free forever</span></span>
       <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg><span data-i18n="t3">No sign-up</span></span>
     </div>
@@ -214,7 +214,7 @@
         <div id="scan-blips"></div>
       </div>
       <div class="scan-t" data-i18n="scanning">Scanning schemes…</div>
-      <div class="scan-s" id="scan-count">0 / 30</div>
+      <div class="scan-s" id="scan-count">0 / 35</div>
     </div>
   </div>
 
@@ -227,13 +227,13 @@
     <div id="res-eligible"></div>
     <div id="res-almost"></div>
     <button class="btn-p has-ic" id="share-btn"><span data-i18n="sharebtn">Share my results</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
-    <button class="btn-s" id="browse-btn" data-i18n="browse">Browse all 30 schemes</button>
+    <button class="btn-s" id="browse-btn" data-i18n="browse">Browse all 35 schemes</button>
     <button class="btn-s" id="retake-btn" data-i18n="retake">Retake the quiz</button>
     <div class="src" data-i18n="src">Scheme data verified against official portals · for guidance only, confirm eligibility on the official site before applying</div>
   </div>
 
   <div class="view" id="v-browse">
-    <h2 class="hero" style="font-size:30px" data-i18n="all">All 30 schemes</h2>
+    <h2 class="hero" style="font-size:30px" data-i18n="all">All 35 schemes</h2>
     <div id="browse-list"></div>
     <button class="btn-s has-ic" id="back-res"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="backres">Back to results</span></button>
   </div>
@@ -267,13 +267,13 @@ const I18N = {
   en: {
     kicker: 'SarkariRadar',
     hero: "Every government scheme you're eligible for. Found in 60 seconds.",
-    lede: "Answer 8 quick questions. Our radar scans 30 central government schemes and pings the ones with your name on them — with what you get and how to apply.",
-    start: "Find my schemes", t1: "30 verified schemes", t2: "Free forever", t3: "No sign-up",
+    lede: "Answer 8 quick questions. Our radar scans 35 central government schemes and pings the ones with your name on them — with what you get and how to apply.",
+    start: "Find my schemes", t1: "35 verified schemes", t2: "Free forever", t3: "No sign-up",
     next: "Continue", scanning: "Scanning schemes…",
     resl: "schemes with your name on them", sharebtn: "Share my results",
-    browse: "Browse all 30 schemes", retake: "Retake the quiz",
+    browse: "Browse all 35 schemes", retake: "Retake the quiz",
     src: "Scheme data verified against official portals · for guidance only, confirm eligibility on the official site before applying",
-    all: "All 30 schemes", backres: "Back to results",
+    all: "All 35 schemes", backres: "Back to results",
     sharet: "Share your results", shares: "A card for WhatsApp, Stories, anywhere.",
     share: "Share", save: "Save", close: "Close",
     eligible_h: "Eligible now", almost_h: "Almost eligible",
@@ -282,18 +282,18 @@ const I18N = {
     err_age: "Please enter a valid age.",
     nohits: "No direct hits",
     nohits_sub: "But {n} are close: see the almost-eligible list below.",
-    nohits_none: "Browse all 30 schemes below to explore."
+    nohits_none: "Browse all 35 schemes below to explore."
   },
   hi: {
     kicker: 'सरकारीरडार',
     hero: "हर सरकारी योजना जिसके आप हकदार हैं। 60 सेकंड में।",
-    lede: "8 आसान सवालों के जवाब दें। हमारा रडार 30 केंद्रीय योजनाओं को स्कैन करके वो खोजेगा जो आपके नाम पर हैं — क्या मिलेगा और कैसे आवेदन करें, इसके साथ।",
-    start: "मेरी योजनाएं खोजें", t1: "30 सत्यापित योजनाएं", t2: "हमेशा मुफ़्त", t3: "कोई साइन-अप नहीं",
+    lede: "8 आसान सवालों के जवाब दें। हमारा रडार 35 केंद्रीय योजनाओं को स्कैन करके वो खोजेगा जो आपके नाम पर हैं — क्या मिलेगा और कैसे आवेदन करें, इसके साथ।",
+    start: "मेरी योजनाएं खोजें", t1: "35 सत्यापित योजनाएं", t2: "हमेशा मुफ़्त", t3: "कोई साइन-अप नहीं",
     next: "आगे बढ़ें", scanning: "योजनाएं स्कैन हो रही हैं…",
     resl: "योजनाएं आपके नाम पर हैं", sharebtn: "अपना परिणाम शेयर करें",
-    browse: "सभी 30 योजनाएं देखें", retake: "क्विज़ दोबारा दें",
+    browse: "सभी 35 योजनाएं देखें", retake: "क्विज़ दोबारा दें",
     src: "योजना डेटा आधिकारिक पोर्टलों से सत्यापित · केवल मार्गदर्शन हेतु, आवेदन से पहले आधिकारिक साइट पर पात्रता जांचें",
-    all: "सभी 30 योजनाएं", backres: "परिणामों पर वापस जाएं",
+    all: "सभी 35 योजनाएं", backres: "परिणामों पर वापस जाएं",
     sharet: "अपना परिणाम शेयर करें", shares: "WhatsApp, Stories, कहीं भी के लिए कार्ड।",
     share: "शेयर करें", save: "सेव करें", close: "बंद करें",
     eligible_h: "अभी पात्र", almost_h: "लगभग पात्र",
@@ -302,7 +302,7 @@ const I18N = {
     err_age: "कृपया सही उम्र दर्ज करें।",
     nohits: "कोई सीधा मिलान नहीं",
     nohits_sub: "लेकिन {n} करीब हैं: नीचे लगभग-पात्र सूची देखें।",
-    nohits_none: "सभी 30 योजनाएं नीचे ब्राउज़ करके देखें।"
+    nohits_none: "सभी 35 योजनाएं नीचे ब्राउज़ करके देखें।"
   }
 };
 function t(k){ return (I18N[LANG] && I18N[LANG][k]) || I18N.en[k] || k; }

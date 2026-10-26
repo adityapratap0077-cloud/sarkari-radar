@@ -2,7 +2,7 @@
 
 > An 8-question quiz that finds which Indian government schemes you are eligible for.
 
-SarkariRadar matches you against 30 curated central government schemes and shows eligible and almost-eligible results, with what you get and how to apply.
+SarkariRadar matches you against 35 curated central government schemes and shows eligible and almost-eligible results, with what you get and how to apply.
 It is for people in India checking scheme eligibility, with a Hindi and English toggle.
 
 Built by Aditya Pratap: https://adityapratapjhansi.vercel.app/about.html
